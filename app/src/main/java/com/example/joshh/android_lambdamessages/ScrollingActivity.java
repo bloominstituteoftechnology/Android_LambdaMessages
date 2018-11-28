@@ -53,6 +53,7 @@ public class ScrollingActivity extends AppCompatActivity {
                                 tv.setText(m.identifier);
                             }
                             tv.setTextSize(20);
+                            tv.setTextColor(getResources().getColor(R.color.textColor));
                             tv.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

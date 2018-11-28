@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android_LambdaMessages</string>
+    <string name="app_name">Lambda Boards</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_view_messages">ViewMessagesActivity</string>
+    <string name="title_activity_view_messages">Messages in board</string>
 </resources>

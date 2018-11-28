@@ -83,6 +83,7 @@ public class ViewMessagesActivity extends AppCompatActivity {
                             TextView tv = new TextView(context);
                             tv.setText(m.getSender() + ": " +m.getText());
                             tv.setTextSize(20);
+                            tv.setTextColor(getResources().getColor(R.color.textColor));
                             messagesLinearLayout.addView(tv);
                         }
                     }
