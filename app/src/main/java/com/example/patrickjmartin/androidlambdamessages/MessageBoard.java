@@ -32,6 +32,8 @@ public class MessageBoard implements Parcelable {
     }
 
     public ArrayList<Message> getMessages() {
+        //This isnt correct
+
         return messages;
     }
 
