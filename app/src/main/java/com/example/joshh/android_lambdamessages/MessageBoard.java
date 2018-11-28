@@ -16,9 +16,14 @@ public class MessageBoard implements Parcelable{
     String title, identifier;
     ArrayList<Message> messages;
 
-    public MessageBoard(String title, String identifier) {
-        this.title = title;
+    public MessageBoard(JSONObject jsonObject, String identifier) {
+        //this.title = title;
         this.identifier = identifier;
+        try {
+            this.title = jsonObject.getString("title");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     protected MessageBoard(Parcel in) {
@@ -50,10 +55,6 @@ public class MessageBoard implements Parcelable{
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
     public ArrayList<Message> getMessages(String id) {
         final String result = NetworkAdapter.httpRequest(String.format(MessageBoardDao.MESSAGE_BOARD_URL, id), NetworkAdapter.GET);
         messages = new ArrayList<>();
@@ -68,11 +69,6 @@ public class MessageBoard implements Parcelable{
         }
     return messages;
     }
-
-    public void setMessages(ArrayList<Message> messages) {
-        this.messages = messages;
-    }
-
 
     @Override
     public int describeContents() {

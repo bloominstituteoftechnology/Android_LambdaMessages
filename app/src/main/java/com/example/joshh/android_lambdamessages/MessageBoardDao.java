@@ -23,7 +23,7 @@ public class MessageBoardDao {
             JSONObject topLevel = new JSONObject(result);
             JSONArray messageBoardIds = topLevel.names();
             for(int i = 0; i < messageBoardIds.length(); i++){
-                messageBoards.add(new MessageBoard(topLevel.getString(messageBoardIds.getString(i)), messageBoardIds.getString(i)));
+                messageBoards.add(new MessageBoard(topLevel.getJSONObject(messageBoardIds.getString(i)), messageBoardIds.getString(i)));
             }
         }catch (JSONException e) {
             e.printStackTrace();
@@ -33,7 +33,6 @@ public class MessageBoardDao {
 
     public static void newMessage(String messageBoardId, Message message){
         String messageBoardUrl = String.format(MESSAGE_BOARD_URL, messageBoardId);
-        Log.i("messageBoardUrl", messageBoardUrl);
         JSONObject json = new JSONObject();
         try {
             json.put("text", message.getText());
@@ -51,7 +50,6 @@ public class MessageBoardDao {
             e.printStackTrace();
         }
         String jsonString = json.toString();
-        Log.i("jsonString", jsonString);
         final String result = NetworkAdapter.httpRequest(messageBoardUrl, NetworkAdapter.POST, jsonString);
         try {
             JSONObject jsonObject = new JSONObject(result);

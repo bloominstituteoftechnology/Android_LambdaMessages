@@ -43,13 +43,15 @@ public class ScrollingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 messageBoards = MessageBoardDao.getMessageBoards();
-                Log.i("messagebaordlength", Integer.toString(messageBoards.size()));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         for(final MessageBoard m : messageBoards){
                             final TextView tv = new TextView(context);
-                            tv.setText(m.identifier);
+                            tv.setText(m.title);
+                            if(m.title == null || m.title.equals("")){
+                                tv.setText(m.identifier);
+                            }
                             tv.setTextSize(20);
                             tv.setOnClickListener(new View.OnClickListener() {
                                 @Override
