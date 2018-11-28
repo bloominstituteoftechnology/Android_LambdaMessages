@@ -1,15 +1,26 @@
 package com.example.joshh.android_lambdamessages;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class ScrollingActivity extends AppCompatActivity {
+
+    ArrayList<MessageBoard> messageBoards = new ArrayList<>();
+    Context context;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +28,8 @@ public class ScrollingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        context = this;
+        linearLayout = findViewById(R.id.message_board_linear_layout);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,6 +38,33 @@ public class ScrollingActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                messageBoards = MessageBoardDao.getMessageBoards();
+                Log.i("messagebaordlength", Integer.toString(messageBoards.size()));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(final MessageBoard m : messageBoards){
+                            final TextView tv = new TextView(context);
+                            tv.setText(m.identifier);
+                            tv.setTextSize(20);
+                            tv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent viewMessagesIntent = new Intent(context, ViewMessagesActivity.class);
+                                    viewMessagesIntent.putExtra("message_board_key", m);
+                                    startActivity(viewMessagesIntent);
+                                }
+                            });
+                            linearLayout.addView(tv);
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
