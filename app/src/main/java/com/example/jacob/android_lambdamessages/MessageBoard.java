@@ -14,22 +14,22 @@ public class MessageBoard implements Parcelable {
     ArrayList<Message> messages;
     JSONObject json;
 
-    public MessageBoard(String title, String identifier, JSONObject json) {
+    public MessageBoard(String title, String identifier) {
         this.title = title;
         this.identifier = identifier;
-        try {
+/*        try {
             JSONArray jsonArray = json.getJSONObject("messages").names();
             JSONObject object;
 
             for (int i = 0; i < jsonArray.length(); ++i) {
                 object = jsonArray.getJSONObject(i);
                 this.json = object;
-//TODO  I need something here?.
+//TODO  DO I need something different here?.
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {

@@ -34,6 +34,7 @@ public class Message implements Parcelable {
             this.timestamp = json.getDouble("timestamp");
         } catch (JSONException e) {
             e.printStackTrace();
+            this.timestamp = System.currentTimeMillis() / 1000;
         }
     }
 

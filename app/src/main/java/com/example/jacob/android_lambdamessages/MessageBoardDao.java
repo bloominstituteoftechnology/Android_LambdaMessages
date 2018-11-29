@@ -1,5 +1,9 @@
 package com.example.jacob.android_lambdamessages;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class MessageBoardDao {
@@ -14,7 +18,19 @@ public class MessageBoardDao {
     public static ArrayList<MessageBoard> getMessageBoards() {
         ArrayList<MessageBoard> boards = new ArrayList<>();
         final String result = NetworkAdapter.httpRequest(BOARDS_URL, NetworkAdapter.GET);
-        
+
+        try {
+            JSONObject topLevel = new JSONObject(result);
+            JSONArray boardNames =  topLevel.names();
+            for(int i = 0; i<boardNames.length();++i) {
+                final String id = boardNames.getString(i);
+                final String title = topLevel.getJSONObject(id).getString("title");
+                boards.add(new MessageBoard(title,id));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         return boards;

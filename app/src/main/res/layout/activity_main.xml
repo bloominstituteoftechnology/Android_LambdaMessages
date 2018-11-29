@@ -10,7 +10,7 @@
             android:id="@+id/add_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Message"
+            android:text="Test"
             app:layout_constraintVertical_bias="0.0" />
 
         <android.support.v7.widget.RecyclerView
