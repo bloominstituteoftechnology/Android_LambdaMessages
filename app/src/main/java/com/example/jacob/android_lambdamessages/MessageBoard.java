@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MessageBoard implements Parcelable{
+public class MessageBoard implements Parcelable {
     String title, identifier;
     ArrayList<Message> messages;
 
@@ -52,7 +52,7 @@ public class MessageBoard implements Parcelable{
     }
 
     public MessageBoard(Parcel parcel) {
+        parcel.readArray(Message.class.getClassLoader());
 
-        
     }
 }
