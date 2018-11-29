@@ -1,5 +1,6 @@
 package com.thadocizn.lambdamessageboard;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +14,14 @@ public class MainActivity extends AppCompatActivity {
 
     LinearLayout parent;
     ArrayList<MessageBoard> messageBoards;
+    Context context;
     //MessageBoard messageBoard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
         messageBoards = new ArrayList<>();
         parent = findViewById(R.id.parentLayout);
 
@@ -37,14 +41,16 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    TextView getDefaultTextView(MessageBoard msgBoard) {
+    TextView getDefaultTextView(final MessageBoard msgBoard) {
         TextView view = new TextView(this);
         view.setText(msgBoard.getTitle());
         view.setTextSize(24);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, MessageBoardActivity.class);
+                intent.putExtra("message rooms", msgBoard);
+                startActivity(intent);
             }
         });
 
