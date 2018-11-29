@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class MessageBoard implements Parcelable {
     String title, identifier;
     ArrayList<Message> messages;
+    JSONObject json;
 
     public MessageBoard(String title, String identifier, JSONObject json) {
         this.title = title;
@@ -19,20 +20,29 @@ public class MessageBoard implements Parcelable {
         try {
             JSONArray jsonArray = json.getJSONObject("messages").names();
             JSONObject object;
-            Message message = null;
+
             for (int i = 0; i < jsonArray.length(); ++i) {
                 object = jsonArray.getJSONObject(i);
-                message.setSender(object.getString("sender"));
-                message.setText(object.getString("text"));
-                message.setTimestamp(object.getDouble("timestamp"));
-                message.setId(object.get);
-                messages.add(message);
+                this.json = object;
+//TODO  I need something here?.
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {
+        @Override
+        public MessageBoard createFromParcel(Parcel in) {
+            return new MessageBoard(in);
+        }
+
+        @Override
+        public MessageBoard[] newArray(int size) {
+            return new MessageBoard[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -47,12 +57,22 @@ public class MessageBoard implements Parcelable {
     }
 
     @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeArray(messages.toArray());
     }
 
     public MessageBoard(Parcel parcel) {
-        parcel.readArray(Message.class.getClassLoader());
-
+        Object[] objects = parcel.readArray(Message.class.getClassLoader());
+        messages = new ArrayList<>();
+        Message message = null;
+        for (Object object : objects) {
+            message = (Message) object;
+            messages.add(message);
+        }
     }
 }
