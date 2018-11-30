@@ -48,7 +48,6 @@ public class MessageBoardDao {
             for (int i = 0; i < boardNames.length(); ++i) {
                 final String id = boardNames.getString(i);
                 JSONObject json = topLevel.getJSONObject(id);
-                final String title = json.getString("title");
                 messages.add(new Message(json, id));
             }
 

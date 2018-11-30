@@ -12,25 +12,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardListAdapter.ViewHolder> {
+public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView messageBoardTitle, messageBoardContent;
+        TextView messageSender, messageText, messageTimestamp;
         ViewGroup parentView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            messageBoardTitle = itemView.findViewById(R.id.messageboard_element_title);
-//            messageBoardContent = itemView.findViewById(R.id.messageBoard_element_content);
-            parentView = itemView.findViewById(R.id.messageboard_element_parent_layout);
+            messageSender = itemView.findViewById(R.id.message_element_sender);
+            messageText = itemView.findViewById(R.id.message_element_text);
+            messageTimestamp = itemView.findViewById(R.id.message_element_timestamp);
+            parentView = itemView.findViewById(R.id.message_element_parent_layout);
         }
     }
 
-    private ArrayList<MessageBoard> dataList;
+    private ArrayList<Message> dataList;
     private Context context;
     private Activity activity;
 
-    MessageBoardListAdapter(ArrayList<MessageBoard> dataList, Activity activity) {
+    MessageListAdapter(ArrayList<Message> dataList, Activity activity) {
         this.dataList = dataList;
         this.activity = activity;
     }
@@ -42,7 +43,7 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
         View view = LayoutInflater.from(
                 viewGroup.getContext())
                 .inflate(
-                        R.layout.messageboard_element_layout,
+                        R.layout.message_element_layout,
                         viewGroup,
                         false);
         return new ViewHolder(view);
@@ -50,18 +51,19 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final MessageBoard data = dataList.get(i);
+        final Message data = dataList.get(i);
 
-        viewHolder.messageBoardTitle.setText(data.getTitle());
-//        viewHolder.messageBoardContent.setText(data.getContent());
-        viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.messageSender.setText(data.getSender());
+        viewHolder.messageText.setText(data.getText());
+        viewHolder.messageTimestamp.setText(String.valueOf(data.getTimestamp()));
+/*        viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MessageViewActivity.class);
-                intent.putExtra(MessageViewActivity.VIEW_BOARD_KEY, data);
+                intent.putExtra(MessageViewActivity.VIEW__KEY, data);
                 activity.startActivity(intent);
             }
-        });
+        });*/
     }
 
     @Override

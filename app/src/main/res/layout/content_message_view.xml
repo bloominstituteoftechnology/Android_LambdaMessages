@@ -15,5 +15,13 @@
         android:text="Message Title Here"
         />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/message_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toBottomOf="@id/text_message_title"
+        />
+
 
 </android.support.constraint.ConstraintLayout>
