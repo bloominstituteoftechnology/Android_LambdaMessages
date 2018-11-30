@@ -53,15 +53,13 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
         final MessageBoard data = dataList.get(i);
 
         viewHolder.messageBoardTitle.setText(data.getTitle());
-
-
 //        viewHolder.messageBoardContent.setText(data.getContent());
         viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(context, EditActivity.class);
-//                intent.putExtra(EditActivity.EDIT_NOTE_KEY, data);
-//                activity.startActivityForResult(intent, MainActivity.EDIT_REQUEST_CODE);
+                Intent intent = new Intent(context, MessageViewActivity.class);
+                intent.putExtra(MessageViewActivity.VIEW_BOARD_KEY, data);
+                activity.startActivity(intent);
             }
         });
     }

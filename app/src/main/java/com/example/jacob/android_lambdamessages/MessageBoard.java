@@ -12,11 +12,13 @@ import java.util.ArrayList;
 public class MessageBoard implements Parcelable {
     String title, identifier;
     ArrayList<Message> messages;
-    JSONObject json;
+//    JSONObject json;
 
     public MessageBoard(String title, String identifier) {
         this.title = title;
         this.identifier = identifier;
+        this.messages = MessageBoardDao.getMessages(identifier);
+
 /*        try {
             JSONArray jsonArray = json.getJSONObject("messages").names();
             JSONObject object;
@@ -63,16 +65,21 @@ public class MessageBoard implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(title);
+        parcel.writeString(identifier);
         parcel.writeArray(messages.toArray());
     }
 
     public MessageBoard(Parcel parcel) {
+        this.title = parcel.readString();
+        this.identifier = parcel.readString();
         Object[] objects = parcel.readArray(Message.class.getClassLoader());
-        messages = new ArrayList<>();
-        Message message = null;
+        ArrayList<Message> messageList = new ArrayList<>();
+        Message message;
         for (Object object : objects) {
             message = (Message) object;
-            messages.add(message);
+            messageList.add(message);
         }
+        this.messages = messageList;
     }
 }

@@ -52,14 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     public class offloadTask extends AsyncTask<Void, Integer, ArrayList<MessageBoard>> {
 
-/*        @Override
-        protected void onPostExecute(ArrayList<MessageBoard> boards) {
-            if (boards != null) {
-                MessageBoardListAdapter adapter = new MessageBoardListAdapter(boards);
-                listView.setAdapter(adapter);
-            }
-        }*/
-
         @Override
         protected void onPostExecute(ArrayList<MessageBoard> messageBoards) {
             super.onPostExecute(messageBoards);
