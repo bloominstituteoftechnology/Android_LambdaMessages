@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,7 +56,8 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
 
         viewHolder.messageSender.setText(data.getSender());
         viewHolder.messageText.setText(data.getText());
-        viewHolder.messageTimestamp.setText(String.valueOf(data.getTimestamp()));
+        Date date = new Date((new Double(data.getTimestamp())).longValue()*1000);
+        viewHolder.messageTimestamp.setText(String.valueOf(date));
 /*        viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

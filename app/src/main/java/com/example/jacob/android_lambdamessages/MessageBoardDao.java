@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MessageBoardDao {
-    private static final String USER_ID = "-LQuzp_LDuYHLe3MDLva/";
     private static final String BASE_URL = "https://lambda-message-board.firebaseio.com/";
     private static final String MESSAGE = "messages/";
     private static final String URL_ENDING = ".json";
