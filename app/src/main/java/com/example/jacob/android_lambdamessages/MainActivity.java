@@ -32,13 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
         activity = this;
-
-        findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new offloadTask().execute();
-            }
-        });
+        
         listView = findViewById(R.id.messageboard_recycler_view);
         layoutManager = new GridLayoutManager(context, LAYOUT_SPAN_COUNT);
         listView.setLayoutManager(layoutManager);
