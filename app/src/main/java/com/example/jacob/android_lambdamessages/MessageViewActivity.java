@@ -7,9 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,8 +20,10 @@ public class MessageViewActivity extends AppCompatActivity {
 
     public static final String VIEW_BOARD_KEY = "view board key";
     public static final int NEW_MESSAGE_CODE = 55;
+    public static final String MESSAGE_BOARD_KEY = "message board id";
 
     MessageBoard inputBoard;
+    String boardId;
     Context context;
     private Activity activity;
     private LinearLayoutManager layoutManager;
@@ -37,21 +37,27 @@ public class MessageViewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        context = this;
+        activity = this;
+
+        inputBoard = (MessageBoard) getIntent().getParcelableExtra(VIEW_BOARD_KEY);
+        boardId = inputBoard.getIdentifier();
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                Intent intent = new Intent(context, MessageViewActivity.class);
+                Intent intent = new Intent(context, NewMessageActivity.class);
+                intent.putExtra(MESSAGE_BOARD_KEY, boardId);
                 startActivityForResult(intent, NEW_MESSAGE_CODE);
 
             }
         });
-        context = this;
-        activity = this;
 
-        inputBoard = (MessageBoard) getIntent().getParcelableExtra(VIEW_BOARD_KEY);
+
         final String title = inputBoard.getTitle();
         ((TextView) findViewById(R.id.text_message_title)).setText(title);
 
@@ -61,8 +67,10 @@ public class MessageViewActivity extends AppCompatActivity {
         ArrayList<Message> dummy = new ArrayList<>();
         listAdapter = new MessageListAdapter(dummy, activity);
         listView.setAdapter(listAdapter);
-        new offloadTask().execute(inputBoard.getIdentifier());
+        new offloadTask().execute(boardId);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -70,14 +78,24 @@ public class MessageViewActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == NEW_MESSAGE_CODE) {
                 if (data != null) {
-                    Message returnedMessage = data.getParcelableExtra(NewMessageActivity.NEW_MESSAGE_KEY);
-                    //TODO Post returnedMessage using something in MessageBoardDao
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    final String returnedBoardId = data.getStringExtra(MESSAGE_BOARD_KEY);
+                    final Message returnedMessage = data.getParcelableExtra(NewMessageActivity.NEW_MESSAGE_KEY);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MessageBoardDao.newMessage(returnedBoardId, returnedMessage);
+                        }
+                    }).start();
                 }
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new offloadTask().execute(boardId);
     }
 
     public class offloadTask extends AsyncTask<String, Integer, ArrayList<Message>> {
@@ -97,6 +115,5 @@ public class MessageViewActivity extends AppCompatActivity {
             return messageList;
         }
     }
-
 }
 

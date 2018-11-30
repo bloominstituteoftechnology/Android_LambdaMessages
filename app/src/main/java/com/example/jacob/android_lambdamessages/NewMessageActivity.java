@@ -19,6 +19,9 @@ public class NewMessageActivity extends AppCompatActivity {
 
         sender = findViewById(R.id.edit_text_nm_sender);
         content = findViewById(R.id.edit_text_nm_text);
+//        final Intent intent = getIntent();
+
+        final String boardId = getIntent().getStringExtra(MessageViewActivity.MESSAGE_BOARD_KEY);
 
         findViewById(R.id.button_save).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,14 +30,17 @@ public class NewMessageActivity extends AppCompatActivity {
                 if (senderName.equals("")) {
                     senderName = "Anonymous";
                 }
+                message = new Message("", "", "-1", -1);
                 message.setSender(senderName);
                 message.setText(content.getText().toString());
                 message.setTimestamp(System.currentTimeMillis() / 1000);
                 Intent intent = new Intent();
                 intent.putExtra(NEW_MESSAGE_KEY, message);
+                intent.putExtra(MessageViewActivity.MESSAGE_BOARD_KEY, boardId);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
         });
     }
+
 }

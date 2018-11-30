@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
         activity = this;
-        
+
         listView = findViewById(R.id.messageboard_recycler_view);
         layoutManager = new GridLayoutManager(context, LAYOUT_SPAN_COUNT);
         listView.setLayoutManager(layoutManager);
@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new offloadTask().execute();
+    }
 }

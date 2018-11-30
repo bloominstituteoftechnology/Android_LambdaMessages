@@ -1,5 +1,7 @@
 package com.example.jacob.android_lambdamessages;
 
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,4 +58,17 @@ public class MessageBoardDao {
 
         return messages;
     }
+
+    public static void newMessage(String boardId, Message message) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sender", message.getSender());
+            jsonObject.put("text", message.getText());
+            jsonObject.put("timestamp", message.getTimestamp());
+            NetworkAdapter.httpRequest(String.format(MESSAGE_URL, boardId), NetworkAdapter.POST,jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

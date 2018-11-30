@@ -1,5 +1,7 @@
 package com.example.jacob.android_lambdamessages;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,11 +19,11 @@ public class NetworkAdapter {
     public static final int TIMEOUT = 3000;
 
     public static String httpRequest(String stringUrl, String requestType) {
-        return httpRequest(stringUrl,requestType,"");
+        return httpRequest(stringUrl,requestType,null);
     }
 
 
-    public static String httpRequest(String stringUrl, String requestType, String body) {
+    public static String httpRequest(String stringUrl, String requestType, JSONObject body) {
         String result = "";
         InputStream stream = null;
         HttpURLConnection connection = null;
@@ -36,7 +38,7 @@ public class NetworkAdapter {
                 connection.connect();
             } else if (requestType.equals(POST) || requestType.equals(PUT)) {
                 OutputStream outputStream = connection.getOutputStream();
-                outputStream.write(body.getBytes());
+                outputStream.write(body.toString().getBytes());
                 outputStream.close();
             }
 
