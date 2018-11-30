@@ -17,7 +17,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messageboard_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true" />
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toBottomOf="@id/add_button"
+        />
 
 </android.support.constraint.ConstraintLayout>

@@ -28,11 +28,11 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
 
     private ArrayList<MessageBoard> dataList;
     private Context context;
-//    private Activity activity;
+    private Activity activity;
 
-    MessageBoardListAdapter(ArrayList<MessageBoard> dataList) {
+    MessageBoardListAdapter(ArrayList<MessageBoard> dataList, Activity activity) {
         this.dataList = dataList;
-//        this.activity = activity;
+        this.activity = activity;
     }
 
     @NonNull
@@ -68,10 +68,14 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        int a;
+        if (dataList != null && !dataList.isEmpty()) {
+            a = dataList.size();
+        } else {
+            a = 0;
+        }
+        return a;
     }
-
-
 
 
 }

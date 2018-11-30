@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.messageboard_recycler_view);
         layoutManager = new GridLayoutManager(context, LAYOUT_SPAN_COUNT);
         listView.setLayoutManager(layoutManager);
+        ArrayList<MessageBoard> dummy = new ArrayList<>();
+        listAdapter = new MessageBoardListAdapter(dummy,activity);
+        listView.setAdapter(listAdapter);
         new offloadTask().execute();
     }
 
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<MessageBoard> messageBoards) {
             super.onPostExecute(messageBoards);
             if (messageBoards != null) {
-                listAdapter = new MessageBoardListAdapter(messageBoards);
+                listAdapter = new MessageBoardListAdapter(messageBoards, activity);
                 listView.setAdapter(listAdapter);
             }
         }
