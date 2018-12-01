@@ -22,7 +22,6 @@ public class NetworkAdapter {
         return httpRequest(stringUrl,requestType,null);
     }
 
-
     public static String httpRequest(String stringUrl, String requestType, JSONObject body) {
         String result = "";
         InputStream stream = null;

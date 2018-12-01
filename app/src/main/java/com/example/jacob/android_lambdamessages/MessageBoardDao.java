@@ -30,12 +30,9 @@ public class MessageBoardDao {
                 final String title = topLevel.getJSONObject(id).getString("title");
                 boards.add(new MessageBoard(title, id));
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return boards;
     }
 
@@ -51,11 +48,9 @@ public class MessageBoardDao {
                 JSONObject json = topLevel.getJSONObject(id);
                 messages.add(new Message(json, id));
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return messages;
     }
 

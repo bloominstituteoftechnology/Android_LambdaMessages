@@ -18,20 +18,6 @@ public class MessageBoard implements Parcelable {
         this.title = title;
         this.identifier = identifier;
         this.messages = MessageBoardDao.getMessages(identifier);
-
-/*        try {
-            JSONArray jsonArray = json.getJSONObject("messages").names();
-            JSONObject object;
-
-            for (int i = 0; i < jsonArray.length(); ++i) {
-                object = jsonArray.getJSONObject(i);
-                this.json = object;
-//TODO  DO I need something different here?.
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {

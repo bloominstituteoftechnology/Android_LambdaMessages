@@ -58,14 +58,6 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         viewHolder.messageText.setText(data.getText());
         Date date = new Date((new Double(data.getTimestamp())).longValue()*1000);
         viewHolder.messageTimestamp.setText(String.valueOf(date));
-/*        viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, MessageViewActivity.class);
-                intent.putExtra(MessageViewActivity.VIEW__KEY, data);
-                activity.startActivity(intent);
-            }
-        });*/
     }
 
     @Override

@@ -19,9 +19,7 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             messageBoardTitle = itemView.findViewById(R.id.messageboard_element_title);
-//            messageBoardContent = itemView.findViewById(R.id.messageBoard_element_content);
             parentView = itemView.findViewById(R.id.messageboard_element_parent_layout);
         }
     }
@@ -53,7 +51,6 @@ public class MessageBoardListAdapter extends RecyclerView.Adapter<MessageBoardLi
         final MessageBoard data = dataList.get(i);
 
         viewHolder.messageBoardTitle.setText(data.getTitle());
-//        viewHolder.messageBoardContent.setText(data.getContent());
         viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
