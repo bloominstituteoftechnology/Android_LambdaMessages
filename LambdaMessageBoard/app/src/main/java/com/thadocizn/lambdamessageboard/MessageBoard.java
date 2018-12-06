@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class MessageBoard implements Parcelable {
     String title, identifier;
     ArrayList<Message> messages;
-    String result = NetworkAdapter.httpRequest(String.format(MessageBoardDao.URL, identifier), NetworkAdapter.GET);
 
     public MessageBoard(String title, String identifier) {
         this.title = title;
@@ -26,8 +25,9 @@ public class MessageBoard implements Parcelable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //TODO Having problem with this
         try {
-            JSONObject topLevel = new JSONObject(result);
+            JSONObject topLevel = new JSONObject(NetworkAdapter.httpRequest(MessageBoardDao.URL, NetworkAdapter.GET));
             JSONArray messageIds = topLevel.names();
             for (int i = 0; i < messageIds.length(); i++) {
                 String strMessage = messageIds.getString(i);
@@ -39,9 +39,10 @@ public class MessageBoard implements Parcelable {
     }
 
     protected MessageBoard(Parcel in) {
+
         title = in.readString();
         identifier = in.readString();
-        result = in.readString();
+        //messages = in.readArray(Message.class.getClassLoader());
     }
 
     public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {

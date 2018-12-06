@@ -13,12 +13,14 @@ public class MessageBoardActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private ArrayList<Message> messages;
-
+    private MessageBoard messageBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_board);
+
+        messageBoard = getIntent().getParcelableExtra(MainActivity.MESSAGE_ROOMS);
 
         recyclerView = findViewById(R.id.recycleViewer);
         adapter = new RecyclerViewAdapter(messages);

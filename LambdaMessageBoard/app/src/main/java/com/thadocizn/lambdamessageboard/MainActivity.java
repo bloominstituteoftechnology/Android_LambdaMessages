@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String MESSAGE_ROOMS = "message rooms";
     LinearLayout parent;
     ArrayList<MessageBoard> messageBoards;
     Context context;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MessageBoardActivity.class);
-                intent.putExtra("message rooms", msgBoard);
+                intent.putExtra(MESSAGE_ROOMS, msgBoard);
                 startActivity(intent);
             }
         });

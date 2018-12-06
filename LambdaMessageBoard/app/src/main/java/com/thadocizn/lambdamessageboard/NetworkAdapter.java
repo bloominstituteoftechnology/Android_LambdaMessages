@@ -13,6 +13,7 @@ public class NetworkAdapter {
 
     private  static final String USER_ID = "-LSQUhWH-I1jXlH_FRi3";
     public static final String  BASE_URL = "https://lambda-message-board.firebaseio.com/";
+    public static final String  END_URL = "https://lambda-message-board.firebaseio.com/";
 
     public static final String GET    = "GET";
     public static final String POST   = "POST";
