@@ -26,9 +26,8 @@ public class MessageBoardDao {
                     String key = it.next(); //key = the top identifier and increments to the next identifier for next time
 
                     final JSONObject jsonBoard = jsonTop.getJSONObject(key); //breaking down the boards into specific objects
-                    String identifier = jsonBoard.getString("identifier"); //grabbing data member
                     String title = jsonBoard.getString("title"); //grabbing data member
-                    resultList.add(new MessageBoard(title, identifier, jsonBoard)); //passing in data members and the whole board
+                    resultList.add(new MessageBoard(title, null, jsonBoard)); //passing in data members and the whole board
                 } catch (JSONException e) {
                         e.printStackTrace();
                 }

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MessageBoard implements Parcelable {
     public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {
@@ -23,7 +24,8 @@ public class MessageBoard implements Parcelable {
         }
     };
     String title, identifier;
-    ArrayList<Message> messages;
+    ArrayList<Message> messages = new ArrayList<>();
+
 
     public MessageBoard(String title, String identifier, JSONObject jsonObject) {
         this.title = title;
@@ -37,8 +39,9 @@ public class MessageBoard implements Parcelable {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    JSONObject message = jsonArray.getJSONObject(i); // iterate through all messages and add them to an arraylist of messaages
-                    messages.add(new Message(
+                    Object name = jsonArray.get(i); // iterate through all messages and add them to an arraylist of messaages
+                    JSONObject message = jsonObject.getJSONObject("messages").getJSONObject(name.toString());
+                    this.messages.add(new Message(
                             message.getString("sender"),
                             message.getString("text"),
                             null,
@@ -55,6 +58,10 @@ public class MessageBoard implements Parcelable {
     protected MessageBoard(Parcel in) {
         title = in.readString();
         identifier = in.readString();
+        Object[] parceledObjects = in.readArray(Message.class.getClassLoader());
+        for (Object eachParceled : parceledObjects) {
+            messages.add((Message) eachParceled);
+        }
     }
 
     public String getTitle() {
@@ -78,5 +85,8 @@ public class MessageBoard implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
         parcel.writeString(identifier);
+        parcel.writeArray(messages.toArray());
     }
+
+
 }
