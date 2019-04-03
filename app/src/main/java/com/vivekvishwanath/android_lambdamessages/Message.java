@@ -1,9 +1,12 @@
 package com.vivekvishwanath.android_lambdamessages;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Message {
+public class Message implements Parcelable {
     private String sender, text, id;
     private double timestamp;
 
@@ -32,7 +35,7 @@ public class Message {
             this.text = messageJSON.getString("text");
         } catch (JSONException e) {
             e.printStackTrace();
-            this.text = null
+            this.text = null;
         }
         try {
             this.id = messageJSON.getString("id");
@@ -47,6 +50,25 @@ public class Message {
             this.timestamp = System.currentTimeMillis() / 1000;
         }
     }
+
+    public Message(Parcel parcel) {
+        this.sender = parcel.readString();
+        this.text = parcel.readString();
+        this.id = parcel.readString();
+        this.timestamp = parcel.readDouble();
+    }
+
+    public static final Creator<Message> CREATOR = new Creator<Message>() {
+        @Override
+        public Message createFromParcel(Parcel in) {
+            return new Message(in);
+        }
+
+        @Override
+        public Message[] newArray(int size) {
+            return new Message[size];
+        }
+    };
 
     public String getSender() {
         return sender;
@@ -79,4 +101,19 @@ public class Message {
     public void setTimestamp(double timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.sender);
+        dest.writeString(this.text);
+        dest.writeString(this.id);
+        dest.writeDouble(this.timestamp);
+    }
+
+
 }
