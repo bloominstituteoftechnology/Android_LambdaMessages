@@ -3,6 +3,8 @@ package com.example.lambdamessages;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -17,6 +19,15 @@ public class BoardView extends AppCompatActivity {
         TextView textView = findViewById(R.id.board_text_view);
         Intent intent = getIntent();
         MessageBoard messageBoard = (intent.getParcelableExtra("MESSAGE_BOARD_KEY"));
-        String hello = "hello";
+        textView.setText(messageBoard.getTitle());
+
+
+        for (Message message: messageBoard.messages) {
+            LinearLayout linearLayout = findViewById(R.id.linear_layout_child);
+            TextView temp = new TextView(this);
+            temp.setText(message.getSender() + ": " + message.getText());
+            linearLayout.addView(temp);
+        }
+
     }
 }

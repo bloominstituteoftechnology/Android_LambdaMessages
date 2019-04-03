@@ -16,7 +16,21 @@ public class Message implements Parcelable {
         this.timestamp = timestamp;
     }
 
+    public String getSender() {
+        return sender;
+    }
 
+    public String getText() {
+        return text;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getTimestamp() {
+        return timestamp;
+    }
 
     protected Message(Parcel in) {
         sender = in.readString();

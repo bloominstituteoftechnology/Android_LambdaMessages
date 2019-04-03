@@ -13,5 +13,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@id/board_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/linear_layout_child"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
+
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
