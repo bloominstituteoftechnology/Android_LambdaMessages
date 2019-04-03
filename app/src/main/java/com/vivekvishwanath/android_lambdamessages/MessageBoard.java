@@ -20,10 +20,16 @@ public class MessageBoard implements Parcelable {
     }
 
     public MessageBoard(JSONObject messageBoardJSON, String identifier) {
+        this.identifer = identifier;
+        try {
+            this.title = messageBoardJSON.getString("title");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             JSONArray messageJSONArray = messageBoardJSON.getJSONObject("messages").names();
             for (int i = 0; i < messageJSONArray.length(); i++) {
-                JSONObject messageJSONObject = messageJSONArray.getJSONObject(i);
+                JSONObject messageJSONObject = messageBoardJSON.getJSONObject(messageJSONArray.getString(i));
                 messages.add(new Message(messageJSONObject));
             }
         } catch (JSONException e) {
