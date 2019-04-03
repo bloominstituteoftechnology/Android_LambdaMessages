@@ -29,7 +29,7 @@ This project uses a firebase API which is unique as it doesn't enforce any struc
 4. Create a constructor which accepts a title and identifier
 
    ```JSON
-    "-LQuzp_LDuYHLe3MDLva": {
+    "-Lb_2nzrahrdW2G38H5u": {
            "messages": {
                "-LQv-QhtT6JHsI1r_XwP": {
                    "sender": "Chance",
@@ -47,7 +47,7 @@ This project uses a firebase API which is unique as it doesn't enforce any struc
    ```
 
 5. Look at the sample message board structure. There are a few things that make this challenging
-  * The top level key (`-LQuzp_LDuYHLe3MDLva`) is a value that we need to store, it is how we will post messages to this thread.
+  * The top level key (`-Lb_2nzrahrdW2G38H5u`) is a value that we need to store, it is how we will post messages to this thread.
   * The items in the `messages` object are their own objects and not members of a `JSONArray`
 6. Instead of just accepting a `JSONObject` we'll have to also accept a `String` which will be the value for `identifier`
 7. When constructing `messages` and adding them to our `List`, we need to use the line `getJSONObject("messages").names();`
