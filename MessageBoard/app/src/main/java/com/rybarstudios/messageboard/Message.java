@@ -76,4 +76,20 @@ public class Message implements Parcelable {
         dest.writeString(id);
         dest.writeDouble(timestamp);
     }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getTimestamp() {
+        return timestamp;
+    }
 }
