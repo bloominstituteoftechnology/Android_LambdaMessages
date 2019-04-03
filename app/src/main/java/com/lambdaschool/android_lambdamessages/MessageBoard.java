@@ -3,6 +3,8 @@ package com.lambdaschool.android_lambdamessages;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -15,17 +17,27 @@ public class MessageBoard implements Parcelable {
     public MessageBoard(String title, String identifier) {
         this.title = title;
         this.identifier = identifier;
+        this.messages = new ArrayList<>();
     }
 
     public MessageBoard(JSONObject jsonObject, String identifier) {
-
-        //getJSONObject("messages").names();
+        this.messages = new ArrayList<>();
+        try {
+            this.title=jsonObject.getString("title");
+//            this.identifier=??;
+            JSONArray jsonArray = jsonObject.getJSONObject("messages").names();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                this.messages.add(new Message(jsonArray.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public MessageBoard(Parcel in) {
         this.title = in.readString();
         this.identifier = in.readString();
-        this.messages = new ArrayList<Message>();
+        this.messages = new ArrayList<>();
 
         Object[] parceledObjects = in.readArray(Message.class.getClassLoader());
 
@@ -33,8 +45,6 @@ public class MessageBoard implements Parcelable {
             this.messages.add((Message) eachParceled);
         }
     }
-
-    //public JSONObject getJSONObject();
 
     @Override
     public int describeContents() {
