@@ -16,6 +16,6 @@ public class BoardView extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.board_text_view);
         Intent intent = getIntent();
-        textView.setText(intent.getStringExtra("identifier"));
+        MessageBoard messageBoard = (intent.getParcelableExtra("MESSAGE_BOARD_KEY"));
     }
 }

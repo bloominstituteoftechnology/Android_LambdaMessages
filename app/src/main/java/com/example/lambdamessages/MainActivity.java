@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     Intent intent = new Intent(context, BoardView.class);
-                                    intent.putExtra("identifier", messageBoard.getIdentifier());
+                                    intent.putExtra("MESSAGE_BOARD_KEY",messageBoard);
                                     startActivity(intent);
                                 }
                             });

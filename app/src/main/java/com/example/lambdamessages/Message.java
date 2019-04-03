@@ -9,14 +9,12 @@ public class Message implements Parcelable {
     String sender, text, id;
     double timestamp;
 
-    public Message(String sender, String text, String id, double timestamp, JSONObject jsonObject) {
+    public Message(String sender, String text, String id, double timestamp) {
         this.sender = sender;
         this.text = text;
         this.id = id;
         this.timestamp = timestamp;
     }
-
-
 
 
 

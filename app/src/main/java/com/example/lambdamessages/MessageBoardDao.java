@@ -17,14 +17,22 @@ public class MessageBoardDao {
         String result = NetworkAdapter.httpRequest(BASE_URL + END_URL);
 
         try {
-            JSONObject jsonTop = new JSONObject(result);
-            for (Iterator<String> it = jsonTop.keys(); it.hasNext(); ) {
-                String key = it.next();
+            JSONObject jsonTop = new JSONObject(result); //takes the result string and turns it into a big JsonObject
+            for (Iterator<String> it = jsonTop.keys(); it.hasNext(); ) { //for each key in the JsonObject
 
-                final JSONObject jsonBoard = jsonTop.getJSONObject(key);
-                String identifier = jsonBoard.getString("identifier");
-                String title = key;
-                resultList.add(new MessageBoard(title,identifier));
+                try {
+
+
+                    String key = it.next(); //key = the top identifier and increments to the next identifier for next time
+
+                    final JSONObject jsonBoard = jsonTop.getJSONObject(key); //breaking down the boards into specific objects
+                    String identifier = jsonBoard.getString("identifier"); //grabbing data member
+                    String title = jsonBoard.getString("title"); //grabbing data member
+                    resultList.add(new MessageBoard(title, identifier, jsonBoard)); //passing in data members and the whole board
+                } catch (JSONException e) {
+                        e.printStackTrace();
+                }
+
             }
             return resultList;
         } catch (JSONException e) {
