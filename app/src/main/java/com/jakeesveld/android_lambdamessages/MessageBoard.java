@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class MessageBoard implements Parcelable {
     private String title, identifier;
-    static ArrayList<Message> messagesList;
+    private static ArrayList<Message> messagesList;
     public static final String TOP_LEVEL_KEY = "-LQuzp_LDuYHLe3MDLva";
 
 
@@ -44,6 +44,18 @@ public class MessageBoard implements Parcelable {
             e.printStackTrace();
         }
 
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public static ArrayList<Message> getMessagesList() {
+        return messagesList;
     }
 
     protected MessageBoard(Parcel in) {
