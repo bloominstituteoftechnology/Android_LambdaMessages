@@ -21,10 +21,22 @@ public class MessageBoard implements Parcelable {
         this.identifier = identifier;
     }
 
+    public MessageBoard(String title, String identifier) {
+        this.title = title;
+        this.identifier = identifier;
+    }
 
-    protected MessageBoard(Parcel in) {
-        title = in.readString();
-        identifier = in.readString();
+    public MessageBoard(Parcel parcel) {
+        this.title = parcel.readString();
+        this.identifier = parcel.readString();
+        Object[] objects = parcel.readArray(Message.class.getClassLoader());
+        ArrayList<Message> messageList = new ArrayList<>();
+        Message message;
+        for (Object object : objects) {
+            message = (Message) object;
+            messageList.add(message);
+        }
+        this.messages = messageList;
     }
 
     public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {
@@ -48,5 +60,18 @@ public class MessageBoard implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(identifier);
+        dest.writeArray(messages.toArray());
+    }
+
+        public String getTitle() {
+        return title;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public ArrayList<Message> getMessages() {
+        return messages;
     }
 }
