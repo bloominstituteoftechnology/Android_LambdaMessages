@@ -29,19 +29,19 @@ public class Message implements Parcelable {
             this.sender = jsonObject.getString("sender");
         } catch (JSONException e) {
             e.printStackTrace();
-            this.sender=null;
+            this.sender = null;
         }
         try {
             this.text = jsonObject.getString("text");
         } catch (JSONException e) {
             e.printStackTrace();
-            this.text=null;
+            this.text = null;
         }
         try {
             this.id = jsonObject.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
-            this.id=null;
+            this.id = null;
         }
         try {
             this.timestamp = jsonObject.getDouble("timestamp");

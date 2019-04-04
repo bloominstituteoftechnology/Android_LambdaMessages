@@ -13,7 +13,6 @@ public class MessageBoard implements Parcelable {
     private String title, identifier;
     private ArrayList<Message> messages;
 
-
     public MessageBoard(String title, String identifier) {
         this.title = title;
         this.identifier = identifier;
@@ -21,35 +20,24 @@ public class MessageBoard implements Parcelable {
     }
 
     public MessageBoard(JSONObject jsonObject, String identifier) {
-        this.messages = new ArrayList<>();
         try {
-            this.title=jsonObject.getString("title");
-//            this.identifier=??;
-            JSONArray jsonArray = jsonObject.getJSONObject("messages").names();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                this.messages.add(new Message(jsonArray.getJSONObject(i)));
-                //JSONObject message = jsonObject.getJSONObject("messages").getJSONObject(name.toString());
-            }
+            this.title = jsonObject.getString("title");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+        this.identifier = identifier;
+        this.messages = new ArrayList<>();
 
-    public MessageBoard(Parcel in) {
-        JSONObject jsonObject=;
         JSONArray jsonArray;
         try {
+
             jsonArray = jsonObject.getJSONObject("messages").names();
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    Object name = jsonArray.get(i);
-                    JSONObject message = jsonObject.getJSONObject("messages").getJSONObject(name.toString());
-                    this.messages.add(new Message(
-                            message.getString("sender"),
-                            message.getString("text"),
-                            null,
-                            message.getDouble("timestamp")));
+                    Object objName = jsonArray.get(i);
+                    JSONObject message = jsonObject.getJSONObject("messages").getJSONObject(objName.toString());
+                    this.messages.add(new Message(message));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -57,6 +45,24 @@ public class MessageBoard implements Parcelable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public MessageBoard(Parcel in) {
+        this.title = in.readString();
+        this.identifier = in.readString();
+        this.messages = new ArrayList<>();
+
+        Object[] parceledObjects = in.readArray(Message.class.getClassLoader());
+
+        if (parceledObjects != null) {
+            for (Object eachParceled : parceledObjects) {
+                this.messages.add((Message) eachParceled);
+            }
+        }
+    }
+
+    public ArrayList<Message> getMessages() {
+        return this.messages;
     }
 
     @Override
