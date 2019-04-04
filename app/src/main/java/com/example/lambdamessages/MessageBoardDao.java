@@ -46,6 +46,10 @@ public class MessageBoardDao {
 
     }
 
+    public static void deleteMessage(Message message, String boardId) {
+        NetworkAdapter.httpRequest(BASE_URL + "/" + boardId + "/messages/" + message.getId() + END_URL, NetworkAdapter.DELETE, null, null);
+    }
+
     public static JSONObject messageToJson(Message message) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder

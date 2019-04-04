@@ -44,7 +44,7 @@ public class MessageBoard implements Parcelable {
                     this.messages.add(new Message(
                             message.getString("sender"),
                             message.getString("text"),
-                            null,
+                            name.toString(),
                             message.getDouble("timestamp")));
                 } catch (JSONException e) {
                     e.printStackTrace();
