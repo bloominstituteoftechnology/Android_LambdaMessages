@@ -33,8 +33,6 @@ public class MessageBoard implements Parcelable {
         JSONArray jsonArray = null;
         try {
             jsonArray = jsonObject.getJSONObject("messages").names();
-
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
                     Object name = jsonArray.get(i); // iterate through all messages and add them to an arraylist of messaages
@@ -70,9 +68,6 @@ public class MessageBoard implements Parcelable {
         return identifier;
     }
 
-    public void setMessages(JSONObject jsonObject) {
-
-    }
 
     @Override
     public int describeContents() {
@@ -87,4 +82,9 @@ public class MessageBoard implements Parcelable {
     }
 
 
+
+    public double getLastMessageTime() {
+        Message lastMessage = messages.get(messages.size()-1); //gets the last element in the array
+        return lastMessage.getTimestamp();
+    }
 }
