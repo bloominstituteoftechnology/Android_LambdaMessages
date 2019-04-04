@@ -1,4 +1,4 @@
-# Lambda Message Board
+# Lambda com.example.android_lambdamessages.Message Board
 
 ## Introduction
 
@@ -10,7 +10,7 @@ In order to save on time for you to write it, this app will not utilize the MVVM
 
 ### Part 1 - Build Models
 This project uses a firebase API which is unique as it doesn't enforce any structure and is essentially a large JSON file. As such, you must be careful in with your URL structure as well as the structure of JSON objects in your POSTs
-1. Create a POJO class called `Message` with the following data members
+1. Create a POJO class called `com.example.android_lambdamessages.Message` with the following data members
   ```java
   String sender, text, id;
   double timestamp;
@@ -23,7 +23,7 @@ This project uses a firebase API which is unique as it doesn't enforce any struc
 
    ```Java
    String title, identifier;
-   ArrayList<Message> messages;
+   ArrayList<com.example.android_lambdamessages.Message> messages;
    ```
 
 4. Create a constructor which accepts a title and identifier
@@ -33,7 +33,7 @@ This project uses a firebase API which is unique as it doesn't enforce any struc
            "messages": {
                "-LQv-QhtT6JHsI1r_XwP": {
                    "sender": "Chance",
-                   "text": "Inaugural Android Message",
+                   "text": "Inaugural Android com.example.android_lambdamessages.Message",
                    "timestamp": 1541809486
                },
                "-LQv-VoXq9fnkka-jLQe": {
@@ -60,11 +60,11 @@ This project uses a firebase API which is unique as it doesn't enforce any struc
 3. call `parcel.write`*Type* passing in all of your current members.
   * Convert your List to an array by calling `toArray` on it, the use `writeArray` to write your result to the parcel
 4. Write a constructor which accepts a `Parcel` and calls `parcel.read`*Type* be sure to read in the same order you wrote the members	
-  * To build the messages list, you'll have to call`parcel.readArray(Message.class.getClassLoader())` to get an array of `Objects`, then instantiate your `ArrayList` of messages. Finally, loop through the object array, cast each element to a message, and then add them to your list
+  * To build the messages list, you'll have to call`parcel.readArray(com.example.android_lambdamessages.Message.class.getClassLoader())` to get an array of `Objects`, then instantiate your `ArrayList` of messages. Finally, loop through the object array, cast each element to a message, and then add them to your list
 5. Click the error message in the class signature and add all unimplemented methods and leave the defaultvalues
-5. Repeat the previous 5 steps in your `Message` class to make it a `Parcelable` as well.
+5. Repeat the previous 5 steps in your `com.example.android_lambdamessages.Message` class to make it a `Parcelable` as well.
 
-### Part 2 - Read Message Boards
+### Part 2 - Read com.example.android_lambdamessages.Message Boards
 Because this API retreives all messages and boards at once, we'll store them all at once.
 1. Create a `NetworkAdapter` class like you have before. Write a `httpRequest` method in this class like before as well
   * Check Part 2 of the [NetworkBasics](https://github.com/LambdaSchool/Android_NetworkBasics) for instructions on how to do this
@@ -115,7 +115,7 @@ Because this API retreives all messages and boards at once, we'll store them all
 
 10. Finally, close the `OutputStream` with the `close` method
 
-### Part 5 - Post a Message
+### Part 5 - Post a com.example.android_lambdamessages.Message
 1. Add edit fields for message text and sender to your thread activity
   * For a challenge, you can create a new activity for settings and store the sender information there
 2. Add a button to trigger the posting of the message, have it retreive the values from your edit fields and store them. We'll add the rest of the functionality in a few minutes
