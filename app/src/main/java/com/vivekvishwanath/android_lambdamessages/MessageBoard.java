@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class MessageBoard implements Parcelable {
 
     private String title, identifier;
-    private ArrayList<Message> messages;
+    private ArrayList<Message> messages = new ArrayList<>();
 
     public MessageBoard(String title, String identifer) {
         this.title = title;
@@ -29,7 +29,8 @@ public class MessageBoard implements Parcelable {
         try {
             JSONArray messageJSONArray = messageBoardJSON.getJSONObject("messages").names();
             for (int i = 0; i < messageJSONArray.length(); i++) {
-                JSONObject messageJSONObject = messageBoardJSON.getJSONObject(messageJSONArray.getString(i));
+                JSONObject messageJSONObject = messageBoardJSON.getJSONObject("messages").getJSONObject(messageJSONArray.getString(i));
+                System.out.println(messageJSONObject);
                 messages.add(new Message(messageJSONObject));
             }
         } catch (JSONException e) {
