@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                         for (final MessageBoard messageBoard : boardList) {
                             TextView textView = new TextView(context);
                             textView.setText(messageBoard.getTitle());
+                            textView.setTextSize(20);
                             textView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

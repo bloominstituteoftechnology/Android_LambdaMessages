@@ -38,9 +38,8 @@
         android:id="@+id/edit_text_message"
         app:layout_constraintStart_toEndOf="@id/edit_text_sender"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_send"
         android:hint="Message"
-        android:layout_width="0dp"
+        android:layout_width="220dp"
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/button_send"
