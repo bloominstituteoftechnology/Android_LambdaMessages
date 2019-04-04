@@ -28,6 +28,7 @@ public class MessageBoard implements Parcelable {
             JSONArray jsonArray = jsonObject.getJSONObject("messages").names();
             for (int i = 0; i < jsonArray.length(); i++) {
                 this.messages.add(new Message(jsonArray.getJSONObject(i)));
+                //JSONObject message = jsonObject.getJSONObject("messages").getJSONObject(name.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -35,14 +36,26 @@ public class MessageBoard implements Parcelable {
     }
 
     public MessageBoard(Parcel in) {
-        this.title = in.readString();
-        this.identifier = in.readString();
-        this.messages = new ArrayList<>();
+        JSONObject jsonObject=;
+        JSONArray jsonArray;
+        try {
+            jsonArray = jsonObject.getJSONObject("messages").names();
 
-        Object[] parceledObjects = in.readArray(Message.class.getClassLoader());
-
-        for (Object eachParceled : parceledObjects) {
-            this.messages.add((Message) eachParceled);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    Object name = jsonArray.get(i);
+                    JSONObject message = jsonObject.getJSONObject("messages").getJSONObject(name.toString());
+                    this.messages.add(new Message(
+                            message.getString("sender"),
+                            message.getString("text"),
+                            null,
+                            message.getDouble("timestamp")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -58,11 +71,13 @@ public class MessageBoard implements Parcelable {
         dest.writeArray(this.messages.toArray());
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Creator<MessageBoard> CREATOR = new Creator<MessageBoard>() {
+        @Override
         public MessageBoard createFromParcel(Parcel in) {
             return new MessageBoard(in);
         }
 
+        @Override
         public MessageBoard[] newArray(int size) {
             return new MessageBoard[size];
         }
