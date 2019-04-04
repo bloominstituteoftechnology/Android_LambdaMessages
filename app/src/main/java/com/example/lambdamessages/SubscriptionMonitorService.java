@@ -15,6 +15,7 @@ public class SubscriptionMonitorService extends Service {
     private static final int CHECK_PERIOD = 15000;
     Long lastCheckTime;
     String subscription;
+    boolean alreadySubbed;
     Context context;
     ArrayList<String> subList;
 
@@ -35,8 +36,14 @@ public class SubscriptionMonitorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("ServiceLog", "onStart entered");
         subscription = intent.getStringExtra("MESSAGE_BOARD_ID");
-        if (!subList.contains(subscription)) {
-            subList.add(subscription);
+        alreadySubbed = intent.getBooleanExtra("ALREADY_SUBBED", false);
+        if (!alreadySubbed) {
+            if (!subList.contains(subscription)) {
+                subList.add(subscription); //adds subscription to sublist if it's not already in there.
+            }
+        }
+        else { //removing subscription
+            subList.remove(subscription);
         }
 
         new Thread(new Runnable() {

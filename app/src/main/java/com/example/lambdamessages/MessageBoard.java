@@ -32,6 +32,7 @@ public class MessageBoard implements Parcelable {
     public MessageBoard(String title, String identifier, JSONObject jsonObject) {
         this.title = title;
         this.identifier = identifier;
+        this.subscribed = SubscriptionCacheDao.checkSubscription(identifier);
         JSONArray jsonArray = null;
         try {
             jsonArray = jsonObject.getJSONObject("messages").names();

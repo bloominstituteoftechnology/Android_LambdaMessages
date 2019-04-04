@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String CHANNEL_ID = "119294";
     ArrayList<MessageBoard> boardList;
     Context context;
+    SubscriptionCacheDao subscriptionCacheDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         createNotificationChannel();
         context = this;
+        subscriptionCacheDao = new SubscriptionCacheDao(context);
         populateViews();
     }
 
@@ -44,7 +46,13 @@ public class MainActivity extends AppCompatActivity {
                             final TextView textView = new TextView(context);
                             textView.setText(messageBoard.getTitle());
                             textView.setTextSize(20);
-                            if (messageBoard.isSubscribed())textView.setTypeface(Typeface.DEFAULT_BOLD);
+                            if (messageBoard.isSubscribed()){ //implements permanence
+                                textView.setTypeface(Typeface.DEFAULT_BOLD);
+                                Intent intent = new Intent(context, SubscriptionMonitorService.class);
+                                intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier());
+                                intent.putExtra("ALREADY_SUBBED", false);
+                                startService(intent);
+                            }
                             textView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -57,12 +65,26 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public boolean onLongClick(View view) {
 
-                                    Intent intent = new Intent(view.getContext(),SubscriptionMonitorService.class);
-                                    intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier());
-                                    textView.setTypeface(Typeface.DEFAULT_BOLD);
-                                    messageBoard.setSubscribed(true);
-                                    startService(intent);
-                                    return true;
+                                    if (!messageBoard.isSubscribed()) {
+                                        Intent intent = new Intent(view.getContext(), SubscriptionMonitorService.class);
+                                        intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier());
+                                        intent.putExtra("ALREADY_SUBBED", false);
+                                        textView.setTypeface(Typeface.DEFAULT_BOLD);
+                                        messageBoard.setSubscribed(true);
+                                        subscriptionCacheDao.subscribe(messageBoard.getIdentifier());
+                                        startService(intent);
+                                        return true;
+                                    }
+                                    else {
+                                        Intent intent = new Intent(view.getContext(), SubscriptionMonitorService.class);
+                                        intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier());
+                                        intent.putExtra("ALREADY_SUBBED", true);
+                                        textView.setTypeface(Typeface.DEFAULT);
+                                        messageBoard.setSubscribed(false);
+                                        subscriptionCacheDao.unSubscribe(messageBoard.getIdentifier());
+                                        startService(intent);
+                                        return true;
+                                    }
                                 }
                             });
                             linearLayout.addView(textView);
