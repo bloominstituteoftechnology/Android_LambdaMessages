@@ -16,22 +16,22 @@ import javax.net.ssl.HttpsURLConnection;
 // S03M03-1 build and test firebase database
 // S03M03-2 Add basic network adapter
 public class NetworkAdapter {
-    public static final String GET     = "GET";
-    public static final String POST    = "POST";
-    public static final String HEAD    = "HEAD";
+    public static final String GET = "GET";
+    public static final String POST = "POST";
+    public static final String HEAD = "HEAD";
     public static final String OPTIONS = "OPTIONS";
-    public static final String PUT     = "PUT";
-    public static final String DELETE  = "DELETE";
-    public static final String TRACE   = "TRACE";
+    public static final String PUT = "PUT";
+    public static final String DELETE = "DELETE";
+    public static final String TRACE = "TRACE";
 
     static String httpRequest(String urlString) {
         return httpRequest(urlString, GET, null, null);
     }
 
     static String httpRequest(String urlString, String requestMethod, JSONObject requestBody, Map<String, String> headerProperties) {
-        String             result      = "";
-        InputStream        inputStream = null;
-        HttpsURLConnection connection  = null;
+        String result = "";
+        InputStream inputStream = null;
+        HttpsURLConnection connection = null;
 
         try {
             URL url = new URL(urlString);
@@ -46,13 +46,13 @@ public class NetworkAdapter {
             }
 
             // S03M03-10 add support for different types of request
-            if(requestMethod.equals(POST) && requestBody != null) {
+            if (requestMethod.equals(POST)||requestMethod.equals(PUT) && requestBody != null) {
                 // S03M03-11 write body of post request
                 connection.setDoInput(true);
                 final OutputStream outputStream = connection.getOutputStream();
                 outputStream.write(requestBody.toString().getBytes());
                 outputStream.close();
-            } else {
+            }  else {
                 connection.connect();
             }
 
@@ -60,8 +60,8 @@ public class NetworkAdapter {
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 inputStream = connection.getInputStream();
                 if (inputStream != null) {
-                    BufferedReader reader  = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder  builder = new StringBuilder();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder builder = new StringBuilder();
 
                     String line;
                     do {

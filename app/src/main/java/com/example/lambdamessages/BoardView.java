@@ -21,6 +21,7 @@ public class BoardView extends AppCompatActivity {
     EditText editTextSender;
     EditText editTextMessage;
     Button sendButton;
+    Button editButton;
     LinearLayout linearLayoutViewGenerator;
     Context context;
 
@@ -34,6 +35,13 @@ public class BoardView extends AppCompatActivity {
         final MessageBoard messageBoard = (intent.getParcelableExtra("MESSAGE_BOARD_KEY"));
         textViewTitle.setText(messageBoard.getTitle());
         populateBoard(messageBoard);
+        editButton = findViewById(R.id.button_edit);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         sendButton = findViewById(R.id.button_send);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +63,8 @@ public class BoardView extends AppCompatActivity {
                             @Override
                             public void run() {
                                 populateBoard(newBoard); //redo the views
+                                editTextMessage.setText("");
+                                editTextSender.setText("");
                             }
                         });
                     }
@@ -94,6 +104,37 @@ public class BoardView extends AppCompatActivity {
                                     }).start();
                                     return true;
                                 case R.id.edit_menu_button:
+                                    editTextMessage = findViewById(R.id.edit_text_message);
+                                    editTextSender = findViewById(R.id.edit_text_sender);
+                                    sendButton.setVisibility(View.GONE);
+                                    editButton.setVisibility(View.VISIBLE);
+                                    editTextSender.setText(message.getSender());
+                                    editTextMessage.setText(message.getText());
+
+                                    editButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                    MessageBoardDao.putMessage(messageBoard, message, editTextMessage.getText().toString(), editTextSender.getText().toString());
+                                                    Log.i("appLog", "Edit triggered");
+                                                    final MessageBoard newBoard = MessageBoardDao.getAMessageBoard(messageBoard.getIdentifier()); //new messageboard GOT from server
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            populateBoard(newBoard); //redo the views
+                                                            editTextMessage.setText("");
+                                                            editTextSender.setText("");
+                                                            editButton.setVisibility(View.GONE);
+                                                            sendButton.setVisibility(View.VISIBLE);
+                                                        }
+                                                    });
+                                                }
+                                            }).start();
+                                        }
+                                    });
                                     return true;
                                 default:
                                     return false;

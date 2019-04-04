@@ -1,5 +1,7 @@
 package com.example.lambdamessages;
 
+import android.text.Editable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,5 +83,10 @@ public class MessageBoardDao {
             e.printStackTrace();
             return null;
         }
+    }
+
+    static void putMessage(MessageBoard messageBoard, Message oldMessage, String messageText, String senderText) {
+        Message newMessage = new Message(senderText, messageText, oldMessage.getId(), oldMessage.getTimestamp());
+        NetworkAdapter.httpRequest(BASE_URL + "/" + messageBoard.getIdentifier() + "/messages/" + newMessage.getId() + END_URL, NetworkAdapter.PUT, messageToJson(newMessage), null);
     }
 }
