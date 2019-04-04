@@ -1,8 +1,12 @@
 package com.example.lambdamessages;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -11,6 +15,7 @@ public class SubscriptionMonitorService extends Service {
     private static final int CHECK_PERIOD = 15000;
     Long lastCheckTime;
     String subscription;
+    Context context;
 
     public SubscriptionMonitorService() {
     }
@@ -19,6 +24,7 @@ public class SubscriptionMonitorService extends Service {
     public void onCreate() {
         lastCheckTime = System.currentTimeMillis()/1000;
         subscription = "";
+        context = this;
         super.onCreate();
         Log.i("ServiceLog", "onCreate entered");
     }
@@ -33,15 +39,13 @@ public class SubscriptionMonitorService extends Service {
             public void run() {
 
                 while (subscription != "") {
-                    //ArrayList<MessageBoard> boardList = MessageBoardDao.getMessageBoards();
-
                     MessageBoard newMessageBoard = MessageBoardDao.getAMessageBoard(subscription);
                     long lasttime = (long)newMessageBoard.getLastMessageTime();
                     if (lasttime > (lastCheckTime)) {
                         Log.i ("ServiceLog", "New result ready");
+                        sendNotification();
                         lastCheckTime = (System.currentTimeMillis()/1000);
                     }
-
                     try {
                         Thread.sleep(CHECK_PERIOD);
                     } catch (InterruptedException e) {
@@ -53,6 +57,16 @@ public class SubscriptionMonitorService extends Service {
 
         }).start();
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void sendNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("New Message Available")
+                .setContentText("New Message in Your Subscribed Thread")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(123, builder.build());
     }
 
     @Override
@@ -69,4 +83,5 @@ public class SubscriptionMonitorService extends Service {
 
         return null;
     }
+
 }
