@@ -12,13 +12,31 @@ import java.util.Iterator;
 
 public class MessageBoard implements Parcelable {
     private String title, identifier;
-    private static ArrayList<Message> messagesList;
-    public static final String TOP_LEVEL_KEY = "-LQuzp_LDuYHLe3MDLva";
+    private ArrayList<Message> messagesList;
+    public static final String TOP_LEVEL_KEY = "Lb_2nzrahrdW2G38H5u";
 
 
-    public MessageBoard(String title, String identifier) {
+    public MessageBoard(String title, String identifier, JSONObject message) {
         this.title = title;
         this.identifier = identifier;
+        JSONObject messages = null;
+        messagesList = new ArrayList<>();
+        try {
+            messages = message.getJSONObject("messages");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        for (Iterator<String> it = messages.keys(); it.hasNext(); ) {
+            String key = it.next();
+
+                try {
+                    Integer timeStamp = messages.getJSONObject(key).getInt("timestamp");
+                    messagesList.add(new Message(messages.getJSONObject(key).getString("sender"), messages.getJSONObject(key).getString("text"), key, timeStamp));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+        }
     }
 
     public MessageBoard(JSONObject json, String identifier){
@@ -54,8 +72,8 @@ public class MessageBoard implements Parcelable {
         return identifier;
     }
 
-    public static ArrayList<Message> getMessagesList() {
-        return messagesList;
+    public ArrayList<Message> getMessagesList() {
+        return this.messagesList;
     }
 
     protected MessageBoard(Parcel in) {

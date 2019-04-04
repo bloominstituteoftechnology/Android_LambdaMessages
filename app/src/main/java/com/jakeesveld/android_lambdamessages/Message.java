@@ -94,4 +94,26 @@ public class Message implements Parcelable {
         dest.writeString(id);
         dest.writeDouble(timestamp);
     }
+
+    public String toJson(){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("sender", sender);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            json.put("text", text);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            json.put("timestamp", timestamp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return json.toString();
+
+    }
 }

@@ -10,20 +10,45 @@ public class MessageBoardsDAO {
     private static final String URL_PREFIX = "https://lambda-message-board.firebaseio.com/";
     private static final String URL_SUFFIX = ".json";
     private static final String GET_ALL_URL = URL_PREFIX + URL_SUFFIX;
+    private static String POST_NEW_MESSAGE = URL_PREFIX + "%s/" + "messages" + URL_SUFFIX;
 
     public static ArrayList<MessageBoard> getMessageBoards(){
         String result = NetworkAdapter.httpRequest(GET_ALL_URL);
         ArrayList<MessageBoard> messageBoards = new ArrayList<>();
         try {
-            JSONObject json = new JSONObject(result).getJSONObject(MessageBoard.TOP_LEVEL_KEY);
+            JSONObject json = new JSONObject(result);
             for (Iterator<String> it = json.keys(); it.hasNext(); ) {
                 String key = it.next();
-                MessageBoard board = new MessageBoard(json.getJSONObject(key).getString("title"), key);
-                messageBoards.add(board);
+                if(key.equals("-Lb_2nzrahrdW2G38H5u")) {
+                    MessageBoard board = new MessageBoard(json.getJSONObject(key).getString("title"),
+                            key,
+                            json.getJSONObject(key));
+
+                    messageBoards.add(board);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return messageBoards;
     }
+
+    public static void createNewMessage(final String jsonData, final MessageBoard messageBoard){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+        try {
+            String result = NetworkAdapter.httpRequest(URL_PREFIX + messageBoard.getIdentifier() + "/" + "messages" + URL_SUFFIX,
+                    "POST",
+                    new JSONObject(jsonData));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+            }
+        }).start();
+    }
+
 }
