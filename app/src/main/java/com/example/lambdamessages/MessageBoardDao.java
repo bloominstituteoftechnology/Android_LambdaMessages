@@ -12,7 +12,7 @@ public class MessageBoardDao {
     private static final String BASE_URL = "https://lambda-message-board.firebaseio.com";
     private static final String END_URL = "/.json";
 
-    public static ArrayList<MessageBoard> getMessageBoards(){
+    public static ArrayList<MessageBoard> getMessageBoards() {
         final ArrayList<MessageBoard> resultList = new ArrayList<>();
         String result = NetworkAdapter.httpRequest(BASE_URL + END_URL);
 
@@ -27,13 +27,34 @@ public class MessageBoardDao {
 
                     final JSONObject jsonBoard = jsonTop.getJSONObject(key); //breaking down the boards into specific objects
                     String title = jsonBoard.getString("title"); //grabbing data member
-                    resultList.add(new MessageBoard(title, null, jsonBoard)); //passing in data members and the whole board
+                    resultList.add(new MessageBoard(title, key, jsonBoard)); //passing in data members and the whole board
                 } catch (JSONException e) {
-                        e.printStackTrace();
+                    e.printStackTrace();
                 }
 
             }
             return resultList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void postMessage(Message message, String boardId) {
+
+        NetworkAdapter.httpRequest(BASE_URL + "/" + boardId + "/messages/" + END_URL, NetworkAdapter.POST, messageToJson(message), null);
+
+    }
+
+    public static JSONObject messageToJson(Message message) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+                .append("{\"text\":\""       + message.getText()      + "\",")
+                .append("\"sender\":\""      + message.getSender()    + "\",")
+                .append("\"timestamp\":"   + message.getTimestamp() + "}");
+
+        try {
+            return new JSONObject(stringBuilder.toString());
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

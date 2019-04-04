@@ -6,8 +6,8 @@ import android.os.Parcelable;
 import org.json.JSONObject;
 
 public class Message implements Parcelable {
-    String sender, text, id;
-    double timestamp;
+    private String sender, text, id;
+    private double timestamp;
 
     public Message(String sender, String text, String id, double timestamp) {
         this.sender = sender;
