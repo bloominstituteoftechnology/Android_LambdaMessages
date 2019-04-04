@@ -11,16 +11,16 @@ import java.util.ArrayList;
 
 public class MessageBoard implements Parcelable {
 
-    private String title, identifer;
+    private String title, identifier;
     private ArrayList<Message> messages;
 
     public MessageBoard(String title, String identifer) {
         this.title = title;
-        this.identifer = identifer;
+        this.identifier = identifer;
     }
 
     public MessageBoard(JSONObject messageBoardJSON, String identifier) {
-        this.identifer = identifier;
+        this.identifier = identifier;
         try {
             this.title = messageBoardJSON.getString("title");
         } catch (JSONException e) {
@@ -39,7 +39,7 @@ public class MessageBoard implements Parcelable {
 
     public MessageBoard(Parcel parcel) {
         this.title = parcel.readString();
-        this.identifer = parcel.readString();
+        this.identifier = parcel.readString();
         Object[] parcelArray = parcel.readArray(Message.class.getClassLoader());
         messages = new ArrayList<>();
         for (int i = 0; i < parcelArray.length; i++) {
@@ -63,8 +63,8 @@ public class MessageBoard implements Parcelable {
         return title;
     }
 
-    public String getIdentifer() {
-        return identifer;
+    public String getIdentifier() {
+        return identifier;
     }
 
     public ArrayList<Message> getMessages() {
@@ -79,7 +79,7 @@ public class MessageBoard implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.title);
-        dest.writeString(this.identifer);
+        dest.writeString(this.identifier);
         dest.writeArray(this.messages.toArray());
     }
 }
