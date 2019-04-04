@@ -53,12 +53,17 @@ public class SubscriptionMonitorService extends Service {
                 while (subscription != "") {
                     for (String name : subList) {
                         MessageBoard newMessageBoard = MessageBoardDao.getAMessageBoard(name);
-                        long lasttime = (long) newMessageBoard.getLastMessageTime();
-                        if (lasttime > (lastCheckTime)) {
-                            Log.i("ServiceLog", "New result ready");
-                            sendNotification(newMessageBoard.getTitle(), newMessageBoard.getLastMessageText(), newMessageBoard.getLastMessageSender());
-                            lastCheckTime = (System.currentTimeMillis() / 1000);
+                        try {
+                            long lasttime = (long) newMessageBoard.getLastMessageTime();
+                            if (lasttime > (lastCheckTime)) {
+                                Log.i("ServiceLog", "New result ready");
+                                sendNotification(newMessageBoard.getTitle(), newMessageBoard.getLastMessageText(), newMessageBoard.getLastMessageSender());
+                                lastCheckTime = (System.currentTimeMillis() / 1000);
+                            }
+                        } catch(Exception e) {
+                            Log.i ("Service Error", "Invalid messagetime on last message of that board, SubscriptionMonitorService.java line 57");
                         }
+
                     }
                     try {
                         Thread.sleep(CHECK_PERIOD);
