@@ -3,6 +3,9 @@ package com.vivekvishwanath.android_lambdamessages;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +16,9 @@ public class ViewMessagesActivity extends AppCompatActivity {
     ArrayList<Message> messages = new ArrayList<>();
     Context context;
     LinearLayout messageViewLayout;
+    EditText senderEditText;
+    EditText textEditText;
+    Button sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +27,22 @@ public class ViewMessagesActivity extends AppCompatActivity {
         context = this;
 
         messageViewLayout = findViewById(R.id.message_view_layout);
+        senderEditText = findViewById(R.id.sender_edit_text);
+        textEditText = findViewById(R.id.text_edit_text);
+        sendButton = findViewById(R.id.send_button);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                MessageBoard messageBoard = getIntent().getParcelableExtra("Message Board");
+                final MessageBoard messageBoard = getIntent().getParcelableExtra("Message Board");
                 messages = messageBoard.getMessages();
+                sendButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Message newMessage = new Message(senderEditText.getText().toString(), textEditText.getText().toString());
+                        MessageBoardDao.postMessage(messageBoard.getIdentifier(), newMessage);
+                    }
+                });
                 for (Message message : messages) {
                     final TextView view = new TextView(context);
                     view.setText(message.getText());

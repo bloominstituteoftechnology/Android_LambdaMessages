@@ -12,6 +12,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class NetworkAdapter {
 
     public static final String GET = "GET";
@@ -20,21 +22,21 @@ public class NetworkAdapter {
     public static final String DELETE = "DELETE";
 
     public static String httpGETRequest(String urlString) {
-        return httpRequest(urlString, GET);
+        return httpRequest(urlString, GET, null);
     }
 
-    public static String httpRequest(String urlString, String requestMethod) {
-        return httpRequest(urlString, requestMethod, null, null);
+    public static String httpRequest(String urlString, String requestMethod, JSONObject requestBody) {
+        return httpRequest(urlString, requestMethod, requestBody, null);
     }
 
     public static String httpRequest(String urlString, String requestMethod, JSONObject requestBody, Map<String, String> headerProperties) {
         String result = "";
         InputStream inputStream = null;
-        HttpURLConnection connection = null;
+        HttpsURLConnection connection = null;
 
         try {
             URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpsURLConnection) url.openConnection();
 
             connection.setRequestMethod(requestMethod);
 
@@ -44,9 +46,9 @@ public class NetworkAdapter {
                 }
             }
 
-            if (requestMethod.equals(POST) || requestMethod.equals(PUT) && headerProperties != null) {
+            if (requestMethod.equals(POST) || requestMethod.equals(PUT)) {
                 connection.setDoInput(true);
-                OutputStream outputStream = connection.getOutputStream();
+                final OutputStream outputStream = connection.getOutputStream();
                 outputStream.write(requestBody.toString().getBytes());
                 outputStream.close();
             } else {
