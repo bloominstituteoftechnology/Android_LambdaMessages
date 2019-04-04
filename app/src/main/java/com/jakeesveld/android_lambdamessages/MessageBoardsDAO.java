@@ -12,6 +12,10 @@ public class MessageBoardsDAO {
     private static final String GET_ALL_URL = URL_PREFIX + URL_SUFFIX;
     private static String POST_NEW_MESSAGE = URL_PREFIX + "%s/" + "messages" + URL_SUFFIX;
 
+    public MessageBoardsDAO(){
+
+    }
+
     public static ArrayList<MessageBoard> getMessageBoards(){
         String result = NetworkAdapter.httpRequest(GET_ALL_URL);
         ArrayList<MessageBoard> messageBoards = new ArrayList<>();
@@ -33,13 +37,13 @@ public class MessageBoardsDAO {
         return messageBoards;
     }
 
-    public static void createNewMessage(final String jsonData, final MessageBoard messageBoard){
+    public void createNewMessage(final String jsonData){
         new Thread(new Runnable() {
             @Override
             public void run() {
 
         try {
-            String result = NetworkAdapter.httpRequest(URL_PREFIX + messageBoard.getIdentifier() + "/" + "messages" + URL_SUFFIX,
+            String result = NetworkAdapter.httpRequest(URL_PREFIX + MessageBoard.TOP_LEVEL_KEY + "/" + "messages" + URL_SUFFIX,
                     "POST",
                     new JSONObject(jsonData));
 

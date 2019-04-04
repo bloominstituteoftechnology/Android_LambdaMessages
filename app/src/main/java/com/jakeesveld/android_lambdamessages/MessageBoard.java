@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class MessageBoard implements Parcelable {
     private String title, identifier;
     private ArrayList<Message> messagesList;
-    public static final String TOP_LEVEL_KEY = "Lb_2nzrahrdW2G38H5u";
+    public static final String TOP_LEVEL_KEY = "-Lb_2nzrahrdW2G38H5u";
 
 
     public MessageBoard(String title, String identifier, JSONObject message) {
