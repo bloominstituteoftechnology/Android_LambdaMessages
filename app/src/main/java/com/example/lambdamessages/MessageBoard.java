@@ -23,15 +23,13 @@ public class MessageBoard implements Parcelable {
             return new MessageBoard[size];
         }
     };
-    String title, identifier;
+    private String title, identifier;
     ArrayList<Message> messages = new ArrayList<>();
 
 
     public MessageBoard(String title, String identifier, JSONObject jsonObject) {
         this.title = title;
         this.identifier = identifier;
-
-
         JSONArray jsonArray = null;
         try {
             jsonArray = jsonObject.getJSONObject("messages").names();

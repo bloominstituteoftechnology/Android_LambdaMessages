@@ -40,6 +40,24 @@ public class MessageBoardDao {
         }
     }
 
+    public static MessageBoard getAMessageBoard(String key) {
+        String result = NetworkAdapter.httpRequest(BASE_URL + END_URL);
+        try {
+            JSONObject jsonTop = new JSONObject(result); //takes the result string and turns it into a big JsonObject
+            try {
+                final JSONObject jsonBoard = jsonTop.getJSONObject(key); //using our key index to find messageboard
+                String title = jsonBoard.getString("title"); //grabbing data member
+                return new MessageBoard(title, key, jsonBoard); //passing in data members and the whole board to constructor
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void postMessage(Message message, String boardId) {
 
         NetworkAdapter.httpRequest(BASE_URL + "/" + boardId + "/messages/" + END_URL, NetworkAdapter.POST, messageToJson(message), null);
@@ -53,9 +71,9 @@ public class MessageBoardDao {
     public static JSONObject messageToJson(Message message) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
-                .append("{\"text\":\""       + message.getText()      + "\",")
-                .append("\"sender\":\""      + message.getSender()    + "\",")
-                .append("\"timestamp\":"   + message.getTimestamp() + "}");
+                .append("{\"text\":\"" + message.getText() + "\",")
+                .append("\"sender\":\"" + message.getSender() + "\",")
+                .append("\"timestamp\":" + message.getTimestamp() + "}");
 
         try {
             return new JSONObject(stringBuilder.toString());

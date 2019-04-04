@@ -14,6 +14,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class BoardView extends AppCompatActivity {
     TextView textViewTitle;
     EditText editTextSender;
@@ -31,18 +33,47 @@ public class BoardView extends AppCompatActivity {
         Intent intent = getIntent();
         final MessageBoard messageBoard = (intent.getParcelableExtra("MESSAGE_BOARD_KEY"));
         textViewTitle.setText(messageBoard.getTitle());
+        populateBoard(messageBoard);
+        sendButton = findViewById(R.id.button_send);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editTextMessage = findViewById(R.id.edit_text_message);
+                editTextSender = findViewById(R.id.edit_text_sender);
+                long timeStamp = (System.currentTimeMillis() / 1000);
+                final Message message = new Message(
+                        editTextSender.getText().toString(),
+                        editTextMessage.getText().toString(),
+                        null,
+                        timeStamp);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageBoardDao.postMessage(message, messageBoard.getIdentifier());
+                        final MessageBoard newBoard = MessageBoardDao.getAMessageBoard(messageBoard.getIdentifier()); //new messageboard GOT from server
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                populateBoard(newBoard); //redo the views
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+    }
 
-
+    private void populateBoard(final MessageBoard messageBoard) {
+        linearLayoutViewGenerator = findViewById(R.id.linear_layout_child);
+        linearLayoutViewGenerator.removeAllViews();
         for (final Message message : messageBoard.messages) { // View Generator, TODO:replace with recyclerview
-            linearLayoutViewGenerator = findViewById(R.id.linear_layout_child);
-            final TextView temp = new TextView(this);
-            temp.setText(message.getSender() + ": " + message.getText());
-            temp.setOnLongClickListener(new View.OnLongClickListener() {
+            final TextView textView = new TextView(this);
+            textView.setText(message.getSender() + ": " + message.getText());
+            textView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    PopupMenu popup = new PopupMenu(context, temp);
+                    PopupMenu popup = new PopupMenu(context, textView);
                     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
@@ -52,6 +83,13 @@ public class BoardView extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             MessageBoardDao.deleteMessage(message, messageBoard.getIdentifier());
+                                            final MessageBoard newBoard = MessageBoardDao.getAMessageBoard(messageBoard.getIdentifier()); //new messageboard GOT from server
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    populateBoard(newBoard); //redo the views
+                                                }
+                                            });
                                         }
                                     }).start();
                                     return true;
@@ -66,31 +104,7 @@ public class BoardView extends AppCompatActivity {
                     return true;
                 }
             });
-            linearLayoutViewGenerator.addView(temp);
+            linearLayoutViewGenerator.addView(textView);
         }
-
-        sendButton = findViewById(R.id.button_send);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editTextMessage = findViewById(R.id.edit_text_message);
-                editTextSender = findViewById(R.id.edit_text_sender);
-                long timeStamp = (System.currentTimeMillis()/1000);
-                final Message message = new Message(
-                        editTextSender.getText().toString(),
-                        editTextMessage.getText().toString(),
-                        null,
-                        timeStamp);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        MessageBoardDao.postMessage(message, messageBoard.getIdentifier()); // gettitle is giving me the actual title, not the identifier
-
-                    }
-                }).start();
-            }
-        });
-
     }
 }

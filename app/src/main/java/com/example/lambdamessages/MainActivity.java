@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+        populateViews();
+    }
+
+    private void populateViews() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -28,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        LinearLayout linearLayout = findViewById(R.id.linear_layout_child);
+                        linearLayout.removeAllViews();
                         for (final MessageBoard messageBoard : boardList) {
-                            LinearLayout linearLayout = findViewById(R.id.linear_layout_child);
                             TextView textView = new TextView(context);
                             textView.setText(messageBoard.getTitle());
                             textView.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
-        int i = 0;
-        //
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        populateViews();
     }
 }
