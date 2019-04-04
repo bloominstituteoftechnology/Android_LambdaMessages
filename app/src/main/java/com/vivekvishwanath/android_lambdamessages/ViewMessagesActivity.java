@@ -31,18 +31,26 @@ public class ViewMessagesActivity extends AppCompatActivity {
         textEditText = findViewById(R.id.text_edit_text);
         sendButton = findViewById(R.id.send_button);
 
+        final MessageBoard messageBoard = getIntent().getParcelableExtra("Message Board");
+        final String identifier = messageBoard.getIdentifier();
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Message newMessage = new Message(senderEditText.getText().toString(), textEditText.getText().toString());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageBoardDao.postMessage(identifier, newMessage);
+                    }
+                }).start();
+            }
+        });
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final MessageBoard messageBoard = getIntent().getParcelableExtra("Message Board");
                 messages = messageBoard.getMessages();
-                sendButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Message newMessage = new Message(senderEditText.getText().toString(), textEditText.getText().toString());
-                        MessageBoardDao.postMessage(messageBoard.getIdentifier(), newMessage);
-                    }
-                });
                 for (Message message : messages) {
                     final TextView view = new TextView(context);
                     view.setText(message.getText());
