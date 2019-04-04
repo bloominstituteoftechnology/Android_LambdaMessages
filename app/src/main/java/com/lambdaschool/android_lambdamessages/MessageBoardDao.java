@@ -12,7 +12,6 @@ public class MessageBoardDao {
     private static final String URL_MIDDLE = "-Lb_2nzrahrdW2G38H5u";
     private static final String URL_ENDING = ".json";
     private static final String URL_READ_ALL = URL_BASE + URL_ENDING;
-    private static final String URL_READ_SPECIFIC = URL_BASE + URL_MIDDLE + URL_ENDING;
 
     public ArrayList<MessageBoard> getMessageBoards() {
         ArrayList<MessageBoard> messageBoardArrayList = new ArrayList<>();
@@ -38,5 +37,26 @@ public class MessageBoardDao {
         }
 
         return messageBoardArrayList;
+    }
+
+    public static Message newMessage(String identifier, Message message) {
+        String url = URL_BASE + identifier + "/" + URL_ENDING;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sender", message.getSender());
+            jsonObject.put("text", message.getText());
+            jsonObject.put("timestamp", (System.currentTimeMillis() / 1000));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String returnedJsonAsString = NetworkAdapter.httpRequest(url, NetworkAdapter.REQUEST_POST, jsonObject, null);
+        try {
+            jsonObject = new JSONObject(returnedJsonAsString);
+            message.setId(jsonObject.getString("name"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return message;
     }
 }

@@ -74,6 +74,10 @@ public class Message implements Parcelable {
         return timestamp;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public static final Creator<Message> CREATOR = new Creator<Message>() {
         @Override
         public Message createFromParcel(Parcel in) {
