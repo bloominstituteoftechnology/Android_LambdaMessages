@@ -25,6 +25,8 @@ public class MessageBoard implements Parcelable {
     };
     private String title, identifier;
     ArrayList<Message> messages = new ArrayList<>();
+    boolean subscribed = false;
+
 
 
     public MessageBoard(String title, String identifier, JSONObject jsonObject) {
@@ -68,6 +70,14 @@ public class MessageBoard implements Parcelable {
         return identifier;
     }
 
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        this.subscribed = subscribed;
+    }
+
 
     @Override
     public int describeContents() {
@@ -86,5 +96,15 @@ public class MessageBoard implements Parcelable {
     public double getLastMessageTime() {
         Message lastMessage = messages.get(messages.size()-1); //gets the last element in the array
         return lastMessage.getTimestamp();
+    }
+
+    public String getLastMessageText() {
+        Message lastMessage = messages.get(messages.size()-1); //gets the last element in the array
+        return lastMessage.getText();
+    }
+    public String getLastMessageSender() {
+        Message lastMessage = messages.get(messages.size()-1); //gets the last element in the array
+        return lastMessage.getSender();
+
     }
 }

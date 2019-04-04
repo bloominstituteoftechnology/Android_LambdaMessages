@@ -16,15 +16,17 @@ public class SubscriptionMonitorService extends Service {
     Long lastCheckTime;
     String subscription;
     Context context;
+    ArrayList<String> subList;
 
     public SubscriptionMonitorService() {
     }
 
     @Override
     public void onCreate() {
-        lastCheckTime = System.currentTimeMillis()/1000;
+        lastCheckTime = System.currentTimeMillis() / 1000;
         subscription = "";
         context = this;
+        subList = new ArrayList<>();
         super.onCreate();
         Log.i("ServiceLog", "onCreate entered");
     }
@@ -33,18 +35,23 @@ public class SubscriptionMonitorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("ServiceLog", "onStart entered");
         subscription = intent.getStringExtra("MESSAGE_BOARD_ID");
+        if (!subList.contains(subscription)) {
+            subList.add(subscription);
+        }
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 while (subscription != "") {
-                    MessageBoard newMessageBoard = MessageBoardDao.getAMessageBoard(subscription);
-                    long lasttime = (long)newMessageBoard.getLastMessageTime();
-                    if (lasttime > (lastCheckTime)) {
-                        Log.i ("ServiceLog", "New result ready");
-                        sendNotification();
-                        lastCheckTime = (System.currentTimeMillis()/1000);
+                    for (String name : subList) {
+                        MessageBoard newMessageBoard = MessageBoardDao.getAMessageBoard(name);
+                        long lasttime = (long) newMessageBoard.getLastMessageTime();
+                        if (lasttime > (lastCheckTime)) {
+                            Log.i("ServiceLog", "New result ready");
+                            sendNotification(newMessageBoard.getTitle(), newMessageBoard.getLastMessageText(), newMessageBoard.getLastMessageSender());
+                            lastCheckTime = (System.currentTimeMillis() / 1000);
+                        }
                     }
                     try {
                         Thread.sleep(CHECK_PERIOD);
@@ -59,11 +66,11 @@ public class SubscriptionMonitorService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void sendNotification() {
+    private void sendNotification(String title, String text, String sender) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("New Message Available")
-                .setContentText("New Message in Your Subscribed Thread")
+                .setContentTitle("New Message in " + title)
+                .setContentText(sender + ": " + text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(123, builder.build());

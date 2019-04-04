@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
                         LinearLayout linearLayout = findViewById(R.id.linear_layout_child);
                         linearLayout.removeAllViews();
                         for (final MessageBoard messageBoard : boardList) {
-                            TextView textView = new TextView(context);
+                            final TextView textView = new TextView(context);
                             textView.setText(messageBoard.getTitle());
                             textView.setTextSize(20);
+                            if (messageBoard.isSubscribed())textView.setTypeface(Typeface.DEFAULT_BOLD);
                             textView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -56,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
                                 public boolean onLongClick(View view) {
 
                                     Intent intent = new Intent(view.getContext(),SubscriptionMonitorService.class);
-                                    intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier().toString());
+                                    intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier());
+                                    textView.setTypeface(Typeface.DEFAULT_BOLD);
+                                    messageBoard.setSubscribed(true);
                                     startService(intent);
                                     return true;
                                 }
