@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         populateViews();
     }
 
-    private void populateViews() {
+    private void populateViews() { // Add all the views for the different threads
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(context, BoardView.class);
                                     intent.putExtra("MESSAGE_BOARD_KEY",messageBoard);
                                     startActivity(intent);
+                                }
+                            });
+                            textView.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View view) {
+
+                                    Intent intent = new Intent(view.getContext(),SubscriptionMonitorService.class);
+                                    intent.putExtra("MESSAGE_BOARD_ID", messageBoard.getIdentifier().toString());
+                                    startService(intent);
+                                    return true;
                                 }
                             });
                             linearLayout.addView(textView);
