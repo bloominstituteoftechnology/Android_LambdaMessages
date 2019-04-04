@@ -6,14 +6,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SolitaryActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linear_layout_main"
+            android:id="@+id/linear_layout_solitary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

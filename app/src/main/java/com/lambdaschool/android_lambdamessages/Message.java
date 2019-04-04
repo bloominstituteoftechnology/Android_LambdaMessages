@@ -58,6 +58,22 @@ public class Message implements Parcelable {
         this.timestamp = in.readDouble();
     }
 
+    public String getSender() {
+        return sender;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getTimestamp() {
+        return timestamp;
+    }
+
     public static final Creator<Message> CREATOR = new Creator<Message>() {
         @Override
         public Message createFromParcel(Parcel in) {

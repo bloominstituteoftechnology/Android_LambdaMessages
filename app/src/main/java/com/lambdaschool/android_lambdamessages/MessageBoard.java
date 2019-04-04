@@ -61,6 +61,14 @@ public class MessageBoard implements Parcelable {
         }
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
     public ArrayList<Message> getMessages() {
         return this.messages;
     }
