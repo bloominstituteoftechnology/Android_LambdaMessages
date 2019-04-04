@@ -22,7 +22,8 @@ public class Message implements Parcelable {
         this.text = text;
     }
 
-    public Message(JSONObject jsonObject) {
+    public Message(JSONObject jsonObject, String id) {
+        this.id = id;
         try {
             this.sender = jsonObject.getString("sender");
         } catch (JSONException e) {
@@ -30,11 +31,6 @@ public class Message implements Parcelable {
         }
         try {
             this.text = jsonObject.getString("text");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            this.id = jsonObject.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
         }

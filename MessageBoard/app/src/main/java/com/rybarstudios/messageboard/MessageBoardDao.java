@@ -31,4 +31,34 @@ public class MessageBoardDao {
         }
         return messageBoards;
     }
+
+    public static ArrayList<Message> getMessages(String identifier) {
+        ArrayList<Message> messages = new ArrayList<>();
+        final String result = NetworkAdapter.httpRequest(String.format(MESSAGE_URL, identifier), NetworkAdapter.GET);
+
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.names();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                final String id = jsonArray.getString(i);
+                JSONObject json = jsonObject.getJSONObject(id);
+                messages.add(new Message(json, id));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public static void newMessage(String boardId, Message message) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sender", message.getSender());
+            jsonObject.put("text", message.getText());
+            jsonObject.put("timestamp", message.getTimestamp());
+            NetworkAdapter.httpRequest(String.format(MESSAGE_URL, boardId), NetworkAdapter.POST,jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
