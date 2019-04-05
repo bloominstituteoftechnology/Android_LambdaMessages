@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LambdaMessages</string>
+    <string name="channel_name">ForumChannel</string>
+    <string name="channel_description">Channel for all forum notifications</string>
+</resources>

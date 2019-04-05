@@ -1,3 +1,4 @@
+Spencer Stock
 # Lambda Message Board
 
 ## Introduction
